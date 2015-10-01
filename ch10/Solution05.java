@@ -30,7 +30,7 @@ public class Solution05 {
 
 			if (str.equals(strings[mid])) {
 				return mid;
-			} else if (strings[mid].compareTo(str) < 0) { // Search right
+			} else if (strings[mid].compareTo(str) < 0) { 
 				first = mid + 1;
 			} else {
 				last = mid - 1;
