@@ -48,6 +48,31 @@ public class Solution25 {
 	}
 	
 	public static void main(String[] args) {
+		
+		/*
+		 * FOLLOW UP:
+		 * 
+		 * We can reverse the two lists, and then use the same algorithm to 
+		 * add the two lists, and then reverse the resultant list.
+		 * 
+		 * If we are forbidden to use reverse:
+		 * Because we are not sure whether the lists have the same length, we need to 
+		 * get the length of them. Assume the longer list's length is l1, and shorter
+		 * list's length is l2. 
+		 * Then we could pad (l1-l2) 0s in front of l2. In this way, we make two lists
+		 * have the same length.
+		 * And then we use two pointers, one begins from the head of l1, and the other 
+		 * begins from the head of the padded l2.
+		 * Use recursion to add every two number from l1 and l2. By using recursion, 
+		 * we could add every two number in the same position of l1 and padded l2 from 
+		 * the tail to the head.
+		 * After every calculation of sum we could produce a new list nodes points to 
+		 * the sum list so far. and return that node to the outer function. Getting the
+		 * returned node, the outer function has the sum list so far, and sum the two 
+		 * numbers and carry and produced a newer node points to the sum list and return...
+		 * Finally, we can get a new list of the total sum of the two lists.
+		 */
+		
 		// test cases
 		// two lists with the same length
 		// two lists with different length and previous one is longer
