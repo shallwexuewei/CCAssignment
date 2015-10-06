@@ -21,6 +21,16 @@ public class Solution21 {
 	}
 	
 	public static void main(String[] args) {
+		
+		/*
+		 * FOLLOW UP:
+		 * If a temporary buffer is not allowed, we can use two pointers, 
+		 * one points to the current list node, and the other traverse all nodes after it. 
+		 * If any node is duplicate of current node, delete it. 
+		 * Though it costs O(1) space, compared to O(N) running time of the above algorithm, 
+		 * it costs O(N^2) running time, given N as the length of the list.
+		 */
+		
 		// test case:
 		// empty list
 		// only one entry in the list
