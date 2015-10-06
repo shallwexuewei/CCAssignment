@@ -1,111 +1,74 @@
 package ch4.cbc.xuewei.ece.cmu;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Solution47 {
-	// It's too complex, I have to code on the reference answer to finish it
-	// in time. Though I have understood the thoughts, it's still too complex to
-	// implement correctly in short time. So I type the reference answer to
-	// finish it in time.
-	Project[] findBuildOrder(String[] projects, String[][] dependencies) {
-		Graph graph = buildGraph(projects, dependencies);
-		return orderProjects(graph.GetNodes());
-	}
+	public static Project[] buildOrder(ArrayList<Project> projects) {
+		Project[] result = new Project[projects.size()];
 
-	Graph buildGraph(String projects, String[][] dependencies) {
-		Graph graph = new Graph();
-		for (String project : projects) {
-			graph.createNode(project);
-		}
-		for (String[] dependency : dependencies) {
-			String first = dependency[0];
-			String second = dependency[1];
-			graph.addEdge(first, second);
-		}
-		return graph;
-	}
+		int lastIndex = addNextProjects(result, projects, 0);
+		int i = 0;
+		while (i < result.length) {
+			Project current = result[i];
 
-	Project[] orderProjects(ArrayList<Project> projects) {
-		Project[] order = new Project[projects.size()];
-
-		int endOfList = addNonDependent(order, projects, 0);
-		int toBeProcessed = 0;
-		while (toBeProcessed < order.length) {
-			Project current = order[toBeProcessed];
-
+			// exception -- if null found, return null
 			if (current == null) {
 				return null;
 			}
 
+			// delete current node from the original graph to
+			// to free all projects that are dependent on it.
 			ArrayList<Project> children = current.getChildren();
 			for (Project child : children) {
 				child.decrementDependencies();
 			}
 
-			endOfList = addNonDependent(order, children, endOfList);
-			toBeProcessed++;
+			// choose the projects without numberDependencies in children to add
+			// in
+			// the result
+			lastIndex = addNextProjects(result, children, lastIndex);
+
+			i++;
 		}
-		return order;
+		return result;
 	}
 
-	int addNonDependent(Project[] order, ArrayList<Project> projects, int offset) {
-		for (Project project : projects) {
+	public static int addNextProjects(Project[] result,
+			ArrayList<Project> candidates, int lastIndex) {
+		for (Project project : candidates) {
+			// add the projects without numberDependencies into result
 			if (project.getNumberDependencies() == 0) {
-				order[offset] = project;
-				offset++;
+				result[lastIndex] = project;
+				lastIndex++;
 			}
 		}
-		return offset;
+		return lastIndex;
 	}
 
-	class Graph {
-		private ArrayList<Project> nodes = new ArrayList<Project>();
-		private HashMap<String, Project> map = new HashMap<String, Project>();
-
-		public Project getOrCreateNode(String name) {
-			if (!map.containsKey(name)) {
-				Project node = new Project(name);
-				nodes.add(node);
-				map.put(name, node);
-			}
-			return map.get(name);
-		}
-
-		public void addEdge(String startName, String endName) {
-			Project start = getOrCreateNode(startName);
-			Project end = getOrCreateNode(endName);
-			start.addNeighbor(end);
-		}
-
-		public ArrayList<Project> getNodes() {
-			return nodes;
-		}
-	}
-
-	class Project {
+	public static class Project {
 		private ArrayList<Project> children = new ArrayList<Project>();
-		private HashMap<String, Project> map = new HashMap<String, Project>();
 		private String name;
-		private int dependencies = 0;
+		private int numberDependencies = 0;
 
-		public Project(String n) {
-			name = n;
+		public Project(String str) {
+			name = str;
 		}
 
-		public void addNeighbor(Project node) {
-			if (!map.containsKey(node.getName())) {
-				children.add(node);
-				node.incrementDependencies();
-			}
+		public void addDependency(Project parent) {
+			parent.addChildren(this);
+		}
+
+		public void addChildren(Project child) {
+			children.add(child);
+			child.incrementDependencies();
 		}
 
 		public void incrementDependencies() {
-			dependencies++;
+			numberDependencies++;
 		}
 
 		public void decrementDependencies() {
-			dependencies--;
+			numberDependencies--;
 		}
 
 		public String getName() {
@@ -117,7 +80,7 @@ public class Solution47 {
 		}
 
 		public int getNumberDependencies() {
-			return dependencies;
+			return numberDependencies;
 		}
 	}
 
@@ -125,6 +88,30 @@ public class Solution47 {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		Project a = new Project("a");
+		Project b = new Project("b");
+		Project c = new Project("c");
+		Project d = new Project("d");
+		Project e = new Project("e");
+		Project f = new Project("f");
+		d.addDependency(a);
+		b.addDependency(f);
+		d.addDependency(b);
+		a.addDependency(f);
+		c.addDependency(d);
+		ArrayList<Project> projects = new ArrayList<Solution47.Project>();
+		projects.add(a);
+		projects.add(b);
+		projects.add(c);
+		projects.add(d);
+		projects.add(e);
+		projects.add(f);
+		Project[] result = buildOrder(projects);
+		for (Project proj : result) {
+			System.out.print(proj.getName());
+			System.out.print(' ');
+		}
+		System.out.println();
 
 	}
 
