@@ -9,24 +9,38 @@ public class Solution41 {
 			return true;
 		}
 
+		// use LinkedList as a queue
 		LinkedList<GraphNode<Integer>> queue = new LinkedList<GraphNode<Integer>>();
 
+		// initialize the first node's state to visiting
 		start.setState(GraphNodeState.Visiting);
+		// add the first point to the queue
 		queue.add(start);
+		
+		// process every node in the queue, 
+		// and add every neighbor of current node to the queue
 		while (!queue.isEmpty()) {
-			GraphNode<Integer> temp = queue.remove();
-			if (temp != null) {
-				for (GraphNode<Integer> node : temp.getNeighbors()) {
+			
+			GraphNode<Integer> current = queue.remove();
+			if (current != null) {
+				// process every neighbors, all neighbors that haven't been visited 
+				// will be added in the queue. 
+				// once find the target node, directly return true;
+				for (GraphNode<Integer> node : current.getNeighbors()) {
 					if (node.getState() == GraphNodeState.Unvisited) {
+						// route found
 						if (node == end) {
 							return true;
-						} else {
+						} 
+						// add unvisited neighbors
+						else {
 							node.setState(GraphNodeState.Visiting);
 							queue.add(node);
 						}
 					}
 				}
-				temp.setState(GraphNodeState.Visited);
+				// update the state of a visited node.
+				current.setState(GraphNodeState.Visited);
 			}
 		}
 		return false;
