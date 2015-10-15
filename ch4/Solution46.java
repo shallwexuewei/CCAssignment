@@ -8,16 +8,16 @@ public class Solution46 {
 			return null;
 		}
 
-		if (node.right != null) {
+		if (node.getRight() != null) {
 			// should recurse to the left most child instead of the node.right.
-			return leftMostChild(node.right);
+			return leftMostChild(node.getRight());
 		} else {
-			TreeNodeWithParent parent = node.parent;
+			TreeNodeWithParent parent = node.getParent();
 			// find the lowest ancestor that is in the left subtree of its
 			// parent
-			while (parent != null && parent.left != node) {
+			while (parent != null && parent.getLeft() != node) {
 				node = parent;
-				parent = parent.parent;
+				parent = parent.getParent();
 			}
 			return parent;
 		}
@@ -25,8 +25,8 @@ public class Solution46 {
 
 	private static TreeNodeWithParent leftMostChild(TreeNodeWithParent node) {
 		TreeNodeWithParent result = node;
-		while (result.left != null) {
-			result = result.left;
+		while (result.getLeft() != null) {
+			result = result.getLeft();
 		}
 		return result;
 	}

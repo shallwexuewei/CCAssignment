@@ -2,11 +2,24 @@ package ch4.cbc.xuewei.ece.cmu;
 
 import java.util.ArrayList;
 
+/**
+ * @author Xuewei Wu
+ * E-mail: xueweiw@andrew.cmu.edu
+ *
+ */
 public class Solution47 {
+	/**
+	 * @param projects
+	 * @return
+	 */
 	public static Project[] buildOrder(ArrayList<Project> projects) {
 		Project[] result = new Project[projects.size()];
 
+		// add the first projects that are without dependencies
+		// because we don't know which projects in the "projects" are without dependencies
+		// we need to assign the whole list to the parameter "candidates"
 		int lastIndex = addNextProjects(result, projects, 0);
+		
 		int i = 0;
 		while (i < result.length) {
 			Project current = result[i];
@@ -23,9 +36,8 @@ public class Solution47 {
 				child.decrementDependencies();
 			}
 
-			// choose the projects without numberDependencies in children to add
-			// in
-			// the result
+			// choose the projects without dependencies in children to add
+			// in the result
 			lastIndex = addNextProjects(result, children, lastIndex);
 
 			i++;
@@ -33,6 +45,12 @@ public class Solution47 {
 		return result;
 	}
 
+	/**
+	 * @param result: insert he candidate projects in the position of "lastIndex" (it's increasing) into result
+	 * @param candidates: the projects that are without dependencies
+	 * @param lastIndex
+	 * @return the updated last Index (it is also the length of so far result list)
+	 */
 	public static int addNextProjects(Project[] result,
 			ArrayList<Project> candidates, int lastIndex) {
 		for (Project project : candidates) {
@@ -48,6 +66,7 @@ public class Solution47 {
 	public static class Project {
 		private ArrayList<Project> children = new ArrayList<Project>();
 		private String name;
+		// use variable numberDependencies to quickly find the project without dependencies
 		private int numberDependencies = 0;
 
 		public Project(String str) {
