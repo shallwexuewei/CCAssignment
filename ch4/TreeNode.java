@@ -9,9 +9,24 @@ public class TreeNode {
 		val = x;
 	}
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+	public static void printTree(TreeNode root) {
+		firstOrderTraverse(root);
+	}
 
+	private static void firstOrderTraverse(TreeNode node) {
+		if (node != null) {
+			System.out.print(node.val);
+			System.out.print('{');
+			firstOrderTraverse(node.left);
+			System.out.print(',');
+			firstOrderTraverse(node.right);
+			System.out.print('}');
+		} else {
+			System.out.print("null");
+		}
+	}
+
+	public static void main(String[] args) {
 	}
 
 }
