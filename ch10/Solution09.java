@@ -1,21 +1,34 @@
 package ch10.cbc.xuewei.ece.cmu;
 
 public class Solution09 {
-	public static boolean sortedMatrixSearch(int[][] matrix, int elem) {
+	/**
+	 * @param matrix: sorted matrix
+	 * @param target: the number to find
+	 * @return true if target is found, else return false.
+	 * 
+	 * Use diagonal value to implement search
+	 * 
+	 */
+	public static boolean sortedMatrixSearch(int[][] matrix, int target) {
 		int row = matrix.length;
 		if(row == 0) {
 			return false;
 		}
 		int col = matrix[0].length;
-		int i = 0;
-		int j = col - 1;
-		while (i < row && j >= 0) {
-			if (matrix[i][j] == elem) {
+		// begins from right up most element.
+		int r = 0;
+		int c = col - 1;
+		while (r < row && c >= 0) {
+			// found
+			if (matrix[r][c] == target) {
 				return true;
-			} else if (matrix[i][j] > elem) {
-				j--;
+			} 
+			else if (matrix[r][c] > target) {
+				// only the left side numbers are less than matrix[r][c]
+				c--;
 			} else {
-				i++;
+				// only the down side numbers are less than matrix[r][c]
+				r++;
 			}
 		}
 		return false;
