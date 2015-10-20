@@ -21,7 +21,6 @@ public class Solution411 {
 			public int size;
 			public RandomTreeNode left;
 			public RandomTreeNode right;
-			public RandomTreeNode parent; // used in the delete function
 			public int val;
 
 			public RandomTreeNode(int val) {
@@ -99,7 +98,7 @@ public class Solution411 {
 			if (root == null) {
 				root = new RandomTreeNode(val);
 			} else {
-				insert(root, val, null);
+				insert(root, val);
 			}
 		}
 
@@ -109,7 +108,7 @@ public class Solution411 {
 		 * @param val
 		 *            : the value needed to be inserted in the subtree
 		 */
-		private void insert(RandomTreeNode node, int val, RandomTreeNode parent) {
+		private void insert(RandomTreeNode node, int val) {
 
 			int nodeVal = node.val;
 			// update the size of every ancestor nodes
@@ -119,9 +118,8 @@ public class Solution411 {
 				// the insert position found
 				if (node.left == null) {
 					node.left = new RandomTreeNode(val);
-					node.left.parent = node;
 				} else {
-					insert(node.left, val, node);
+					insert(node.left, val);
 				}
 			}
 			// the new node should be in the right subtree
@@ -129,9 +127,8 @@ public class Solution411 {
 				// the insert position found
 				if (node.right == null) {
 					node.right = new RandomTreeNode(val);
-					node.right.parent = node;
 				} else {
-					insert(node.right, val, node);
+					insert(node.right, val);
 				}
 			}
 		}
