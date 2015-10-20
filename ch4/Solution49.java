@@ -4,25 +4,34 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Solution49 {
+	/**
+	 * @param node
+	 *            : given node of binary search tree
+	 * @return all possible sequence to produce the binary search tree whose
+	 *         root is the given node
+	 */
 	public static ArrayList<LinkedList<Integer>> BSTSequences(TreeNode node) {
 		ArrayList<LinkedList<Integer>> result = new ArrayList<LinkedList<Integer>>();
 		LinkedList<Integer> prefix = new LinkedList<Integer>();
 
+		// no more nodes to add in
 		if (node == null) {
 			result.add(prefix);
 			return result;
 		}
 
-		// as long as the middle node has been added, all smaller values inserted
-		// will go to the left subtree of the node, and all larger values inserted
-		// will go to the right subtree of the node, so we need to add the middle 
-		// value firstly
+		// as long as the middle node has been added, all smaller values
+		// inserted will go to the left subtree of the node, and all larger
+		// values inserted will go to the right subtree of the node, so we need
+		// to add the middle value (current tree's root) firstly
 		prefix.add(node.val);
 
+		// produce all possible sequence from left and right sub trees firstly
+		// and then they can be used to weave to larger sequence.
 		ArrayList<LinkedList<Integer>> leftSequences = BSTSequences(node.left);
 		ArrayList<LinkedList<Integer>> rightSequences = BSTSequences(node.right);
 
-		// weave
+		// weave the sub lists to get larger sequence
 		for (LinkedList<Integer> left : leftSequences) {
 			for (LinkedList<Integer> right : rightSequences) {
 				ArrayList<LinkedList<Integer>> weaved = new ArrayList<LinkedList<Integer>>();
@@ -33,18 +42,29 @@ public class Solution49 {
 		return result;
 	}
 
-	/*
-	 * combine left and right and prefix in all possible ways.
+	/**
+	 * @param left
+	 *            : sequence produced by the left subtree
+	 * @param right
+	 *            : sequence produced by the right subtree
+	 * @param prefix
+	 *            : prefix of the result lists
+	 * @param weavedLists
+	 *            : the result -- all possible sequences after combining left
+	 *            and right sub sequences
 	 */
-	public static void weaveLists(LinkedList<Integer> left, LinkedList<Integer> right,LinkedList<Integer> prefix,
+	public static void weaveLists(LinkedList<Integer> left,
+			LinkedList<Integer> right, LinkedList<Integer> prefix,
 			ArrayList<LinkedList<Integer>> weavedLists) {
 		// If one list is empty, directly add the other list after the prefix
 		if (left.size() == 0 || right.size() == 0) {
-			// do not use weavedList = prefix, because it will modify prefix whatever you do to weavedList
-			// Note that here clone() is used to hard copy
-//			LinkedList<Integer> weavedList = (LinkedList<Integer>) prefix.clone();
 			LinkedList<Integer> weavedList = new LinkedList<Integer>();
-			weavedList.addAll(prefix);
+			weavedList.addAll(prefix); // or you can use
+			// LinkedList<Integer> weavedList = (LinkedList<Integer>)
+			// prefix.clone();
+			// but do not use weavedList = prefix, because it will modify
+			// "prefix" according to whatever you do on the variable
+			// "weavedList"
 			weavedList.addAll(left);
 			weavedList.addAll(right);
 			weavedLists.add(weavedList);
@@ -52,7 +72,10 @@ public class Solution49 {
 		}
 
 		// remove the head of the left, and add it to the prefix
-		// recursively run weavelists
+		// recursively run the function "weavelists".
+		// In this way, we guarantee that all elements in the left
+		// subsequence is added in order, but it doesn't matter how
+		// the elements of right sub sequence are inserted between them
 		int head = left.removeFirst();
 		prefix.addLast(head);
 		weaveLists(left, right, prefix, weavedLists);
@@ -62,6 +85,9 @@ public class Solution49 {
 
 		// remove the head of the right, and add it to the prefix
 		// recursively run weavelists
+		// In this way, we guarantee that all elements in the right
+		// subsequence is added in order but it doesn't matter how
+		// the elements of left sub sequence are inserted between them
 		head = right.removeFirst();
 		prefix.addLast(head);
 		weaveLists(left, right, prefix, weavedLists);
@@ -74,9 +100,9 @@ public class Solution49 {
 		TreeNode root = new TreeNode(2);
 		root.left = new TreeNode(1);
 		root.right = new TreeNode(3);
-		ArrayList<LinkedList<Integer>>  result = Solution49.BSTSequences(root);
-		for(LinkedList<Integer> list : result){
-			for(int i: list) {
+		ArrayList<LinkedList<Integer>> result = Solution49.BSTSequences(root);
+		for (LinkedList<Integer> list : result) {
+			for (int i : list) {
 				System.out.print(i);
 				System.out.print(' ');
 			}

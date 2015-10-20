@@ -41,10 +41,20 @@ public class Solution48 {
 		return null;
 	}
 
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
+		/*
+		 * If there is no links to the parents, 
+		 * then we need to 
+		 * 1. check firstly whether the two nodes have the same root
+		 * 2. after the 1st step, we can have the root node
+		 * 3. from the root node, travel down. At every level, check 
+		 * whether the two nodes are in the same subtree (same side):
+		 * if yes, continue traveling down
+		 * else, return current node
+		 * 
+		 */
+		
+		// answer : 1
 		TreeNodeWithParent node1 = new TreeNodeWithParent(1);
 		TreeNodeWithParent node2 = new TreeNodeWithParent(2);
 		node1.setLeft(node2);
@@ -52,7 +62,7 @@ public class Solution48 {
 		node1.setRight(node3);
 		System.out.println(Solution48.firstCommonAncestor(node1, node2).val);
 		
-
+		// answer : 2
 		TreeNodeWithParent node4 = new TreeNodeWithParent(4);
 		node2.setLeft(node4);
 		System.out.println(Solution48.firstCommonAncestor(node4, node2).val);
